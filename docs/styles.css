@@ -403,10 +403,6 @@ a { color: inherit; text-decoration: none; }
 .hidden { display: none; }
 
 @media (max-width: 720px) {
-    html {
-        font-size: 13px;
-    }
-
     .hero,
     .admin-header,
     .section-head { flex-direction: column; }
@@ -419,26 +415,26 @@ a { color: inherit; text-decoration: none; }
 
     .hero,
     .admin-header {
-        padding: 0.8rem 0.7rem 0.45rem;
-        gap: 0.55rem;
+        padding: 1rem 0.9rem 0.7rem;
+        gap: 0.75rem;
     }
 
     .layout,
     .admin-layout,
     .login-body {
-        padding-left: 0.65rem;
-        padding-right: 0.65rem;
+        padding-left: 0.9rem;
+        padding-right: 0.9rem;
     }
 
     .layout,
     .admin-layout {
-        gap: 0.7rem;
+        gap: 1rem;
     }
 
     .card,
     .login-card {
-        padding: 0.72rem;
-        border-radius: 16px;
+        padding: 1rem;
+        border-radius: 20px;
     }
 
     .section-head { align-items: flex-start; }
@@ -455,31 +451,31 @@ a { color: inherit; text-decoration: none; }
     .hero h1,
     .admin-header h1,
     .login-card h1 {
-        font-size: clamp(1.3rem, 6vw, 1.95rem);
+        font-size: clamp(1.65rem, 7vw, 2.3rem);
         line-height: 1;
-        margin-bottom: 0.2rem;
+        margin-bottom: 0.35rem;
     }
 
     .eyebrow {
-        font-size: 0.62rem;
-        letter-spacing: 0.12em;
+        font-size: 0.68rem;
+        letter-spacing: 0.14em;
     }
 
     .stats-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0.55rem;
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
     }
 
     .compact-stats {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0.55rem;
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
     }
 
     .stats-grid article,
     #admin-resumen article {
-        min-height: 62px;
-        padding: 0.62rem;
-        border-radius: 14px;
+        min-height: 88px;
+        padding: 0.9rem;
+        border-radius: 18px;
     }
 
     .student-top {
@@ -510,25 +506,25 @@ a { color: inherit; text-decoration: none; }
     .fee-grid {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 0.45rem;
+        gap: 0.6rem;
     }
 
     .fee {
         min-width: 0;
         width: 100%;
-        padding: 0.58rem 0.65rem;
-        border-radius: 14px;
+        padding: 0.75rem 0.85rem;
+        border-radius: 16px;
     }
 
     .two-column {
         grid-template-columns: 1fr;
-        gap: 0.8rem;
+        gap: 1rem;
     }
 
     .form-actions,
     .admin-actions {
         width: 100%;
-        gap: 0.55rem;
+        gap: 0.7rem;
     }
 
     .button,
@@ -539,91 +535,87 @@ a { color: inherit; text-decoration: none; }
         width: 100%;
         justify-content: center;
         text-align: center;
-        padding: 0.62rem 0.9rem;
-        border-radius: 14px;
+        padding: 0.82rem 1rem;
+        border-radius: 16px;
     }
 
     .chip-row {
-        gap: 0.32rem;
-        margin-top: 0.55rem;
+        gap: 0.45rem;
+        margin-top: 0.7rem;
     }
 
     .stats-grid strong,
-    #admin-resumen strong { font-size: 1.05rem; }
+    #admin-resumen strong { font-size: 1.45rem; }
 
     .stats-grid span,
     #admin-resumen span {
-        font-size: 0.72rem;
+        font-size: 0.82rem;
     }
 
     .stack-form {
-        gap: 0.62rem;
+        gap: 0.85rem;
     }
 
     .stack-form label {
-        gap: 0.2rem;
-        font-size: 0.88rem;
+        gap: 0.3rem;
+        font-size: 0.98rem;
     }
 
     .stack-form input,
     .stack-form select {
-        padding: 0.58rem 0.68rem;
-        font-size: 0.88rem;
-        border-radius: 12px;
+        padding: 0.82rem 0.9rem;
+        font-size: 1rem;
+        border-radius: 14px;
     }
 
     .password-toggle {
-        padding: 0.58rem 0.68rem;
-        font-size: 0.84rem;
-        border-radius: 12px;
+        padding: 0.82rem 0.9rem;
+        font-size: 0.95rem;
+        border-radius: 14px;
     }
 
     .student-card,
     .expense-card,
     .income-card,
     .fee {
-        font-size: 0.84rem;
+        font-size: 0.95rem;
     }
 
     .student-card,
     .expense-card,
     .income-card,
     .student-accordion {
-        border-radius: 16px;
+        border-radius: 18px;
     }
 
     .student-summary-row,
     .student-accordion-body {
-        padding: 0.72rem;
+        padding: 0.9rem;
     }
 }
 
 @media (max-width: 420px) {
-    html {
-        font-size: 12px;
-    }
-
     .card,
     .login-card {
-        padding: 0.62rem;
+        padding: 0.85rem;
     }
 
     .stack-form input,
     .stack-form select {
-        padding: 0.52rem 0.62rem;
+        padding: 0.75rem 0.82rem;
     }
 
     .password-toggle {
-        padding: 0.52rem 0.62rem;
+        padding: 0.75rem 0.82rem;
     }
 
     .stats-grid strong,
     #admin-resumen strong {
-        font-size: 0.96rem;
+        font-size: 1.25rem;
     }
 
     .stats-grid span,
     #admin-resumen span {
-        font-size: 0.68rem;
+        font-size: 0.76rem;
     }
 }
