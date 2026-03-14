@@ -1,4 +1,4 @@
-﻿export const MONTHS = [
+export const MONTHS = [
     "Enero",
     "Febrero",
     "Marzo",
@@ -246,12 +246,14 @@ export function renderStudentSummary(student, courseSummary = null) {
     document.getElementById("student-name").textContent = `${student.first_name} ${student.last_name}`;
     document.getElementById("student-course").textContent = student.course || "Curso sin especificar";
     document.getElementById("student-email").textContent = student.email || "Sin correo asignado";
-    document.getElementById("course-total-debt").textContent = money.format(courseSummary?.total_course_debt || 0);
-    document.getElementById("student-debt-total").textContent = money.format(student.debt_total);
-    document.getElementById("student-total-paid").textContent = money.format(student.total_paid);
-    document.getElementById("course-total-paid").textContent = money.format(courseSummary?.total_fee_payments || 0);
-    document.getElementById("course-total-income").textContent = money.format(courseSummary?.total_income || 0);
-    document.getElementById("course-total-expenses").textContent = money.format(courseSummary?.total_expenses || 0);
+    document.getElementById("student-resumen").innerHTML = `
+        <article><span>Deuda curso</span><strong>${money.format(courseSummary?.total_course_debt || 0)}</strong></article>
+        <article><span>Deuda alumno</span><strong>${money.format(student.debt_total)}</strong></article>
+        <article><span>Pagado alumno</span><strong>${money.format(student.total_paid)}</strong></article>
+        <article><span>Pagado curso</span><strong>${money.format(courseSummary?.total_fee_payments || 0)}</strong></article>
+        <article><span>Fondos curso</span><strong>${money.format(courseSummary?.total_income || 0)}</strong></article>
+        <article><span>Gastos curso</span><strong>${money.format(courseSummary?.total_expenses || 0)}</strong></article>
+    `;
 }
 
 export function renderStudents(students, containerId, showActions = false) {
