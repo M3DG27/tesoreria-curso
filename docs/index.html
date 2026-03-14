@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=700, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tesorería del Curso</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="public-body">
+    <header class="hero">
+        <div class="hero-brand">
+            <div>
+                <p class="eyebrow">Tesorería del curso</p>
+                <h1>Cuotas, gastos y deuda M3D</h1>
+            </div>
+        </div>
+        <div class="admin-actions">
+            <button class="button secondary hidden" id="admin-back-button" type="button">Administración</button>
+            <button class="button secondary" id="switch-account-button" type="button">Cambiar cuenta</button>
+        </div>
+    </header>
+
+    <main class="layout">
+        <section class="card notice hidden" id="config-warning"></section>
+
+        <section class="card student-summary-card">
+            <div class="section-head">
+                <div>
+                    <h2 id="student-name">Alumno</h2>
+                    <p id="student-course">Curso</p>
+                    <p id="student-email">Correo</p>
+                </div>
+            </div>
+            <div class="stats-grid compact-stats">
+                <article>
+                    <span>Deuda total curso</span>
+                    <strong id="course-total-debt">$0</strong>
+                </article>
+                <article>
+                    <span>Deuda alumno</span>
+                    <strong id="student-debt-total">$0</strong>
+                </article>
+                <article>
+                    <span>Total pagado alumno</span>
+                    <strong id="student-total-paid">$0</strong>
+                </article>
+                <article>
+                    <span>Total pagado curso</span>
+                    <strong id="course-total-paid">$0</strong>
+                </article>
+                <article>
+                    <span>Fondos totales del curso</span>
+                    <strong id="course-total-income">$0</strong>
+                </article>
+                <article>
+                    <span>Gastos del curso</span>
+                    <strong id="course-total-expenses">$0</strong>
+                </article>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="section-head">
+                <div>
+                    <h2>Mis cuotas</h2>
+                    <p>Aquí solo aparecen tus pagos y saldos pendientes.</p>
+                </div>
+            </div>
+            <div id="tabla-alumnos" class="student-list"></div>
+        </section>
+
+        <section class="card">
+            <div class="section-head">
+                <div>
+                    <h2>Gastos del curso</h2>
+                    <p>Aquí puedes revisar en qué se ha usado el dinero del curso.</p>
+                </div>
+            </div>
+            <div id="lista-gastos" class="expenses-list"></div>
+        </section>
+
+        <section class="card">
+            <div class="section-head">
+                <div>
+                    <h2>Ingresos adicionales del curso</h2>
+                    <p>Aquí puedes revisar donaciones, fondos de años anteriores y otros aportes.</p>
+                </div>
+            </div>
+            <div id="lista-ingresos" class="incomes-list"></div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./config.js"></script>
+    <script type="module" src="./js/public.js"></script>
+</body>
+</html>
