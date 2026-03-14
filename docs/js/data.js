@@ -250,7 +250,7 @@ export function renderStudentSummary(student, courseSummary = null) {
         <article><span>Deuda alumno</span><strong>${money.format(student.debt_total)}</strong></article>
         <article><span>Pagado alumno</span><strong>${money.format(student.total_paid)}</strong></article>
         <article><span>Pagado curso</span><strong>${money.format(courseSummary?.total_fee_payments || 0)}</strong></article>
-        <article><span>Fondos curso</span><strong>${money.format(courseSummary?.total_income || 0)}</strong></article>
+        <article><span>Saldo actual</span><strong>${money.format(courseSummary?.current_balance || 0)}</strong></article>
         <article><span>Gastos curso</span><strong>${money.format(courseSummary?.total_expenses || 0)}</strong></article>
     `;
 }
