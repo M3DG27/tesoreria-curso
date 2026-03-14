@@ -245,7 +245,6 @@ export function renderAdminSummaryCards(containerId, summary) {
 export function renderStudentSummary(student, courseSummary = null) {
     document.getElementById("student-name").textContent = `${student.first_name} ${student.last_name}`;
     document.getElementById("student-course").textContent = student.course || "Curso sin especificar";
-    document.getElementById("student-email").textContent = student.email || "Sin correo asignado";
     document.getElementById("student-resumen").innerHTML = `
         <article><span>Deuda curso</span><strong>${money.format(courseSummary?.total_course_debt || 0)}</strong></article>
         <article><span>Deuda alumno</span><strong>${money.format(student.debt_total)}</strong></article>
@@ -267,10 +266,10 @@ export function renderStudents(students, containerId, showActions = false) {
         container.innerHTML = students.map((student) => `
             <details class="student-accordion">
                 <summary class="student-summary-row">
-                    <div>
-                        <h3>${student.first_name} ${student.last_name}</h3>
-                        <p>${student.course || "Curso sin especificar"}</p>
-                    </div>
+                <div>
+                    <h3>${student.first_name} ${student.last_name}</h3>
+                    <p>${student.course || "Curso sin especificar"}</p>
+                </div>
                     <div class="student-summary-side">
                         <strong>Debe ${money.format(student.debt_total)}</strong>
                         <span class="chip ${student.pending_count ? "pending" : ""}">${student.pending_count ? `${student.pending_count} cuotas pendientes` : "Sin cuotas pendientes"}</span>
@@ -278,9 +277,6 @@ export function renderStudents(students, containerId, showActions = false) {
                 </summary>
                 <div class="student-accordion-body">
                     <div class="student-top">
-                        <div>
-                            <p>${student.email || "Sin correo asignado"}</p>
-                        </div>
                         <div>
                             <strong>Total pagado ${money.format(student.total_paid)}</strong>
                         </div>
@@ -312,7 +308,6 @@ export function renderStudents(students, containerId, showActions = false) {
                 <div>
                     <h3>${student.first_name} ${student.last_name}</h3>
                     <p>${student.course || "Curso sin especificar"}</p>
-                    <p>${student.email || "Sin correo asignado"}</p>
                 </div>
                 <div>
                     <strong>Debe ${money.format(student.debt_total)}</strong>
