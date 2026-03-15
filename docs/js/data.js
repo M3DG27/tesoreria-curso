@@ -358,6 +358,7 @@ export function renderExpenses(expenses, containerId, showActions = false) {
             ${showActions ? `
                 <div class="row-actions">
                     <button class="small-button secondary" type="button" data-edit-expense="${expense.id}">Editar gasto</button>
+                    <button class="small-button danger" type="button" data-delete-expense="${expense.id}">Eliminar</button>
                 </div>
             ` : ""}
         </article>
@@ -386,6 +387,7 @@ export function renderIncomes(incomes, containerId, showActions = false) {
             ${showActions ? `
                 <div class="row-actions">
                     <button class="small-button secondary" type="button" data-edit-income="${income.id}">Editar ingreso</button>
+                    <button class="small-button danger" type="button" data-delete-income="${income.id}">Eliminar</button>
                 </div>
             ` : ""}
         </article>
