@@ -91,6 +91,34 @@
                     </label>
                     <button class="button" type="submit">Generar cuotas</button>
                 </form>
+
+                <div class="section-head">
+                    <div>
+                        <h2>Eliminar cuotas</h2>
+                        <p>Elimina una tanda mensual completa o todas las cuotas del curso</p>
+                    </div>
+                </div>
+                <form id="delete-fees-month-form" class="stack-form">
+                    <label>Año<input type="number" name="anio" min="2024" value="2026" required></label>
+                    <label>Mes
+                        <select name="mes" required>
+                            <option value="3">Marzo</option>
+                            <option value="4">Abril</option>
+                            <option value="5">Mayo</option>
+                            <option value="6">Junio</option>
+                            <option value="7">Julio</option>
+                            <option value="8">Agosto</option>
+                            <option value="9">Septiembre</option>
+                            <option value="10">Octubre</option>
+                            <option value="11">Noviembre</option>
+                            <option value="12">Diciembre</option>
+                        </select>
+                    </label>
+                    <div class="form-actions">
+                        <button class="button danger" type="submit">Eliminar cuotas del mes</button>
+                        <button class="button danger" id="delete-all-fees-button" type="button">Eliminar todas las cuotas</button>
+                    </div>
+                </form>
             </div>
         </section>
 
