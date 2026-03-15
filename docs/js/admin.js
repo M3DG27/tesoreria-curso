@@ -8,6 +8,10 @@ const pagosForm = document.getElementById("pagos-form");
 const ingresosForm = document.getElementById("ingresos-form");
 const gastosForm = document.getElementById("gastos-form");
 const cuotaSearch = document.getElementById("cuota-search");
+const adminExpenses = document.getElementById("admin-gastos");
+const adminIncomes = document.getElementById("admin-ingresos");
+const cancelExpenseButton = document.getElementById("cancel-expense-edit");
+const cancelIncomeButton = document.getElementById("cancel-income-edit");
 
 let supabase;
 let currentStudents = [];
@@ -98,11 +102,13 @@ function resetStudentForm() {
 function resetExpenseForm() {
     gastosForm.reset();
     gastosForm.elements["id"].value = "";
+    gastosForm.querySelector('button[type="submit"]').textContent = "Guardar gasto";
 }
 
 function resetIncomeForm() {
     ingresosForm.reset();
     ingresosForm.elements["id"].value = "";
+    ingresosForm.querySelector('button[type="submit"]').textContent = "Guardar ingreso";
 }
 
 function feeLabel(fee) {
@@ -121,36 +127,24 @@ function fillFeeOptions(items) {
         .join("");
 }
 
-function bindEditButtons() {
-    document.querySelectorAll("[data-edit-expense]").forEach((button) => {
-        button.addEventListener("click", () => {
-            const expense = currentExpenses.find((item) => item.id === Number(button.dataset.editExpense));
-            if (!expense) {
-                return;
-            }
+function startExpenseEdit(expense) {
+    gastosForm.elements["id"].value = expense.id;
+    gastosForm.elements["concepto"].value = expense.concept;
+    gastosForm.elements["monto"].value = expense.amount;
+    gastosForm.elements["fecha"].value = expense.spent_at;
+    gastosForm.elements["descripcion"].value = expense.description || "";
+    gastosForm.querySelector('button[type="submit"]').textContent = "Guardar cambios";
+    gastosForm.scrollIntoView({ behavior: "smooth", block: "center" });
+}
 
-            gastosForm.elements["id"].value = expense.id;
-            gastosForm.elements["concepto"].value = expense.concept;
-            gastosForm.elements["monto"].value = expense.amount;
-            gastosForm.elements["fecha"].value = expense.spent_at;
-            gastosForm.elements["descripcion"].value = expense.description || "";
-        });
-    });
-
-    document.querySelectorAll("[data-edit-income]").forEach((button) => {
-        button.addEventListener("click", () => {
-            const income = currentIncomes.find((item) => item.id === Number(button.dataset.editIncome));
-            if (!income) {
-                return;
-            }
-
-            ingresosForm.elements["id"].value = income.id;
-            ingresosForm.elements["origen"].value = income.source;
-            ingresosForm.elements["monto"].value = income.amount;
-            ingresosForm.elements["fecha"].value = income.received_at;
-            ingresosForm.elements["descripcion"].value = income.description || "";
-        });
-    });
+function startIncomeEdit(income) {
+    ingresosForm.elements["id"].value = income.id;
+    ingresosForm.elements["origen"].value = income.source;
+    ingresosForm.elements["monto"].value = income.amount;
+    ingresosForm.elements["fecha"].value = income.received_at;
+    ingresosForm.elements["descripcion"].value = income.description || "";
+    ingresosForm.querySelector('button[type="submit"]').textContent = "Guardar cambios";
+    ingresosForm.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 async function ensureTreasurer() {
@@ -187,7 +181,6 @@ async function refreshData() {
     renderExpenses(treasuryData.expenses, "admin-gastos", true);
     bindStudentAccordions();
     fillFeeOptions(pendingFees);
-    bindEditButtons();
 }
 
 async function createFeesForStudents(studentIds, year, amount, monthStart, monthEnd) {
@@ -394,8 +387,40 @@ async function main() {
         fillFeeOptions(pendingFees.filter((fee) => feeLabel(fee).toLowerCase().includes(term)));
     });
 
-    document.getElementById("cancel-expense-edit").addEventListener("click", resetExpenseForm);
-    document.getElementById("cancel-income-edit").addEventListener("click", resetIncomeForm);
+    adminExpenses.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-edit-expense]");
+        if (!button) {
+            return;
+        }
+
+        const expense = currentExpenses.find((item) => item.id === Number(button.dataset.editExpense));
+        if (!expense) {
+            showWarning("No se pudo encontrar el gasto seleccionado.");
+            return;
+        }
+
+        hideWarning();
+        startExpenseEdit(expense);
+    });
+
+    adminIncomes.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-edit-income]");
+        if (!button) {
+            return;
+        }
+
+        const income = currentIncomes.find((item) => item.id === Number(button.dataset.editIncome));
+        if (!income) {
+            showWarning("No se pudo encontrar el ingreso seleccionado.");
+            return;
+        }
+
+        hideWarning();
+        startIncomeEdit(income);
+    });
+
+    cancelExpenseButton.addEventListener("click", resetExpenseForm);
+    cancelIncomeButton.addEventListener("click", resetIncomeForm);
     document.getElementById("logout-button").addEventListener("click", async () => {
         await supabase.auth.signOut();
         window.location.href = "./login.html";
@@ -405,3 +430,4 @@ async function main() {
 main().catch((error) => {
     showWarning(`No se pudo cargar el panel: ${error.message}`);
 });
+
