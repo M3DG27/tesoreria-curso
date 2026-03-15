@@ -297,6 +297,9 @@ export function renderStudents(students, containerId, showActions = false) {
                                 <span>Cuota: ${money.format(fee.amount)}</span><br>
                                 <span>Pagado: ${money.format(fee.paid)}</span><br>
                                 <span class="chip ${fee.status === "Pendiente" ? "pending" : ""}">${fee.status}</span>
+                                <div class="row-actions">
+                                    <button class="small-button danger" type="button" data-delete-fee="${fee.id}">Eliminar cuota</button>
+                                </div>
                             </div>
                         `).join("")}
                     </div>
