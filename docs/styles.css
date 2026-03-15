@@ -289,6 +289,12 @@ a { color: inherit; text-decoration: none; }
     color: #ffffff;
 }
 
+.small-button.danger {
+    background: linear-gradient(135deg, #c54f6a, #a63f57);
+    color: #ffffff;
+    box-shadow: 0 8px 18px rgba(166, 63, 87, 0.22);
+}
+
 .small-button { padding: 0.45rem 0.8rem; }
 
 .two-column {
