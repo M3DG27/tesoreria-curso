@@ -4,6 +4,8 @@ import { getConfigWarning, getSupabase, hasSupabaseConfig } from "./supabase-cli
 const warning = document.getElementById("config-warning");
 const alumnoForm = document.getElementById("alumno-form");
 const cuotasForm = document.getElementById("cuotas-form");
+const deleteFeesMonthForm = document.getElementById("delete-fees-month-form");
+const deleteAllFeesButton = document.getElementById("delete-all-fees-button");
 const pagosForm = document.getElementById("pagos-form");
 const ingresosForm = document.getElementById("ingresos-form");
 const gastosForm = document.getElementById("gastos-form");
@@ -198,6 +200,32 @@ async function deleteStudent(studentId) {
     }
 }
 
+async function deleteFee(feeId) {
+    const { error } = await supabase.from("fees").delete().eq("id", feeId);
+    if (error) {
+        throw error;
+    }
+}
+
+async function deleteFeesByMonth(year, month) {
+    const { error } = await supabase
+        .from("fees")
+        .delete()
+        .eq("year", year)
+        .eq("month", month);
+
+    if (error) {
+        throw error;
+    }
+}
+
+async function deleteAllFees() {
+    const { error } = await supabase.from("fees").delete().gt("id", 0);
+    if (error) {
+        throw error;
+    }
+}
+
 async function ensureTreasurer() {
     const { user, profile } = await getCurrentProfile(supabase);
     if (!user || profile?.role !== "tesorero") {
@@ -341,6 +369,40 @@ async function main() {
 
         try {
             await createFeesForStudents(activeIds, year, amount, monthStart, monthEnd);
+            await refreshData();
+        } catch (error) {
+            showWarning(error.message);
+        }
+    });
+
+    deleteFeesMonthForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        hideWarning();
+
+        const year = Number(deleteFeesMonthForm.elements["anio"].value);
+        const month = Number(deleteFeesMonthForm.elements["mes"].value);
+
+        if (!window.confirm(`Se eliminarán todas las cuotas de ${MONTHS[month - 1]} ${year}. ¿Quieres continuar?`)) {
+            return;
+        }
+
+        try {
+            await deleteFeesByMonth(year, month);
+            await refreshData();
+        } catch (error) {
+            showWarning(error.message);
+        }
+    });
+
+    deleteAllFeesButton.addEventListener("click", async () => {
+        hideWarning();
+
+        if (!window.confirm("Se eliminarán todas las cuotas del curso y sus pagos asociados. ¿Quieres continuar?")) {
+            return;
+        }
+
+        try {
+            await deleteAllFees();
             await refreshData();
         } catch (error) {
             showWarning(error.message);
@@ -522,6 +584,29 @@ async function main() {
     adminStudents.addEventListener("click", (event) => {
         const editButton = event.target.closest("[data-edit-student]");
         const deleteButton = event.target.closest("[data-delete-student]");
+        const deleteFeeButton = event.target.closest("[data-delete-fee]");
+
+        if (deleteFeeButton) {
+            const feeId = Number(deleteFeeButton.dataset.deleteFee);
+            const fee = currentStudents
+                .flatMap((student) => student.fees)
+                .find((item) => item.id === feeId);
+
+            if (!fee) {
+                showWarning("No se pudo encontrar la cuota seleccionada.");
+                return;
+            }
+
+            if (!window.confirm(`Se eliminará la cuota de ${fee.month_name} ${fee.year}. ¿Quieres continuar?`)) {
+                return;
+            }
+
+            hideWarning();
+            deleteFee(feeId)
+                .then(refreshData)
+                .catch((error) => showWarning(error.message));
+            return;
+        }
 
         if (deleteButton) {
             const studentId = Number(deleteButton.dataset.deleteStudent);
