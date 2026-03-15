@@ -28,11 +28,12 @@
             <div>
                 <div class="section-head">
                     <div>
-                        <h2>Agregar alumno</h2>
+                        <h2 id="student-form-title">Agregar alumno</h2>
                         <p>Agrega un alumno con su correo de acceso y su estado</p>
                     </div>
                 </div>
                 <form id="alumno-form" class="stack-form">
+                    <input type="hidden" name="id">
                     <label>Nombre<input type="text" name="nombre" required></label>
                     <label>Apellido<input type="text" name="apellido" required></label>
                     <label>Correo institucional<input type="email" name="email" placeholder="Correo institucional" required></label>
@@ -45,6 +46,7 @@
                     </label>
                     <div class="form-actions">
                         <button class="button" type="submit">Guardar alumno</button>
+                        <button class="button secondary" type="button" id="cancel-student-edit">Cancelar</button>
                     </div>
                 </form>
             </div>
@@ -138,7 +140,7 @@
             <div>
                 <div class="section-head">
                     <div>
-                        <h2>Registrar gastos</h2>
+                        <h2>Registrar o editar gastos</h2>
                         <p>Registrar egresos</p>
                     </div>
                 </div>
