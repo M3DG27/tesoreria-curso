@@ -8,8 +8,11 @@ const pagosForm = document.getElementById("pagos-form");
 const ingresosForm = document.getElementById("ingresos-form");
 const gastosForm = document.getElementById("gastos-form");
 const cuotaSearch = document.getElementById("cuota-search");
+const adminStudents = document.getElementById("admin-alumnos");
 const adminExpenses = document.getElementById("admin-gastos");
 const adminIncomes = document.getElementById("admin-ingresos");
+const studentFormTitle = document.getElementById("student-form-title");
+const cancelStudentButton = document.getElementById("cancel-student-edit");
 const cancelExpenseButton = document.getElementById("cancel-expense-edit");
 const cancelIncomeButton = document.getElementById("cancel-income-edit");
 
@@ -96,7 +99,10 @@ function hideWarning() {
 
 function resetStudentForm() {
     alumnoForm.reset();
+    alumnoForm.elements["id"].value = "";
     alumnoForm.elements["activo"].value = "1";
+    alumnoForm.querySelector('button[type="submit"]').textContent = "Guardar alumno";
+    studentFormTitle.textContent = "Agregar alumno";
 }
 
 function resetExpenseForm() {
@@ -147,6 +153,18 @@ function startIncomeEdit(income) {
     ingresosForm.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
+function startStudentEdit(student) {
+    alumnoForm.elements["id"].value = student.id;
+    alumnoForm.elements["nombre"].value = student.first_name;
+    alumnoForm.elements["apellido"].value = student.last_name;
+    alumnoForm.elements["email"].value = student.email || "";
+    alumnoForm.elements["curso"].value = student.course || "";
+    alumnoForm.elements["activo"].value = student.active ? "1" : "0";
+    alumnoForm.querySelector('button[type="submit"]').textContent = "Guardar cambios";
+    studentFormTitle.textContent = "Editar alumno";
+    alumnoForm.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
 async function deleteExpense(expenseId) {
     const { error } = await supabase.from("expenses").delete().eq("id", expenseId);
     if (error) {
@@ -166,6 +184,17 @@ async function deleteIncome(incomeId) {
 
     if (ingresosForm.elements["id"].value === String(incomeId)) {
         resetIncomeForm();
+    }
+}
+
+async function deleteStudent(studentId) {
+    const { error } = await supabase.from("students").delete().eq("id", studentId);
+    if (error) {
+        throw error;
+    }
+
+    if (alumnoForm.elements["id"].value === String(studentId)) {
+        resetStudentForm();
     }
 }
 
@@ -272,7 +301,14 @@ async function main() {
             return;
         }
 
-        const { error } = await supabase.from("students").insert(payload);
+        const id = alumnoForm.elements["id"].value;
+        let error;
+
+        if (id) {
+            ({ error } = await supabase.from("students").update(payload).eq("id", Number(id)));
+        } else {
+            ({ error } = await supabase.from("students").insert(payload));
+        }
 
         if (error) {
             showWarning(error.message);
@@ -483,6 +519,44 @@ async function main() {
         startIncomeEdit(income);
     });
 
+    adminStudents.addEventListener("click", (event) => {
+        const editButton = event.target.closest("[data-edit-student]");
+        const deleteButton = event.target.closest("[data-delete-student]");
+
+        if (deleteButton) {
+            const studentId = Number(deleteButton.dataset.deleteStudent);
+            const student = currentStudents.find((item) => item.id === studentId);
+            if (!student) {
+                showWarning("No se pudo encontrar el alumno seleccionado.");
+                return;
+            }
+
+            if (!window.confirm(`Se eliminará al alumno "${student.first_name} ${student.last_name}" y sus cuotas asociadas. ¿Quieres continuar?`)) {
+                return;
+            }
+
+            hideWarning();
+            deleteStudent(studentId)
+                .then(refreshData)
+                .catch((error) => showWarning(error.message));
+            return;
+        }
+
+        if (!editButton) {
+            return;
+        }
+
+        const student = currentStudents.find((item) => item.id === Number(editButton.dataset.editStudent));
+        if (!student) {
+            showWarning("No se pudo encontrar el alumno seleccionado.");
+            return;
+        }
+
+        hideWarning();
+        startStudentEdit(student);
+    });
+
+    cancelStudentButton.addEventListener("click", resetStudentForm);
     cancelExpenseButton.addEventListener("click", resetExpenseForm);
     cancelIncomeButton.addEventListener("click", resetIncomeForm);
     document.getElementById("logout-button").addEventListener("click", async () => {
