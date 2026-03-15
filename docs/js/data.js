@@ -286,6 +286,10 @@ export function renderStudents(students, containerId, showActions = false) {
                             <span class="chip">${label}</span>
                         `).join("")}
                     </div>
+                    <div class="row-actions">
+                        <button class="small-button secondary" type="button" data-edit-student="${student.id}">Editar alumno</button>
+                        <button class="small-button danger" type="button" data-delete-student="${student.id}">Eliminar</button>
+                    </div>
                     <div class="fee-grid">
                         ${student.fees.map((fee) => `
                             <div class="fee">
