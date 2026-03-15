@@ -147,6 +147,28 @@ function startIncomeEdit(income) {
     ingresosForm.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
+async function deleteExpense(expenseId) {
+    const { error } = await supabase.from("expenses").delete().eq("id", expenseId);
+    if (error) {
+        throw error;
+    }
+
+    if (gastosForm.elements["id"].value === String(expenseId)) {
+        resetExpenseForm();
+    }
+}
+
+async function deleteIncome(incomeId) {
+    const { error } = await supabase.from("income_entries").delete().eq("id", incomeId);
+    if (error) {
+        throw error;
+    }
+
+    if (ingresosForm.elements["id"].value === String(incomeId)) {
+        resetIncomeForm();
+    }
+}
+
 async function ensureTreasurer() {
     const { user, profile } = await getCurrentProfile(supabase);
     if (!user || profile?.role !== "tesorero") {
@@ -388,12 +410,33 @@ async function main() {
     });
 
     adminExpenses.addEventListener("click", (event) => {
-        const button = event.target.closest("[data-edit-expense]");
-        if (!button) {
+        const editButton = event.target.closest("[data-edit-expense]");
+        const deleteButton = event.target.closest("[data-delete-expense]");
+
+        if (deleteButton) {
+            const expenseId = Number(deleteButton.dataset.deleteExpense);
+            const expense = currentExpenses.find((item) => item.id === expenseId);
+            if (!expense) {
+                showWarning("No se pudo encontrar el gasto seleccionado.");
+                return;
+            }
+
+            if (!window.confirm(`Se eliminará el gasto "${expense.concept}". ¿Quieres continuar?`)) {
+                return;
+            }
+
+            hideWarning();
+            deleteExpense(expenseId)
+                .then(refreshData)
+                .catch((error) => showWarning(error.message));
             return;
         }
 
-        const expense = currentExpenses.find((item) => item.id === Number(button.dataset.editExpense));
+        if (!editButton) {
+            return;
+        }
+
+        const expense = currentExpenses.find((item) => item.id === Number(editButton.dataset.editExpense));
         if (!expense) {
             showWarning("No se pudo encontrar el gasto seleccionado.");
             return;
@@ -404,12 +447,33 @@ async function main() {
     });
 
     adminIncomes.addEventListener("click", (event) => {
-        const button = event.target.closest("[data-edit-income]");
-        if (!button) {
+        const editButton = event.target.closest("[data-edit-income]");
+        const deleteButton = event.target.closest("[data-delete-income]");
+
+        if (deleteButton) {
+            const incomeId = Number(deleteButton.dataset.deleteIncome);
+            const income = currentIncomes.find((item) => item.id === incomeId);
+            if (!income) {
+                showWarning("No se pudo encontrar el ingreso seleccionado.");
+                return;
+            }
+
+            if (!window.confirm(`Se eliminará el ingreso "${income.source}". ¿Quieres continuar?`)) {
+                return;
+            }
+
+            hideWarning();
+            deleteIncome(incomeId)
+                .then(refreshData)
+                .catch((error) => showWarning(error.message));
             return;
         }
 
-        const income = currentIncomes.find((item) => item.id === Number(button.dataset.editIncome));
+        if (!editButton) {
+            return;
+        }
+
+        const income = currentIncomes.find((item) => item.id === Number(editButton.dataset.editIncome));
         if (!income) {
             showWarning("No se pudo encontrar el ingreso seleccionado.");
             return;
@@ -430,4 +494,3 @@ async function main() {
 main().catch((error) => {
     showWarning(`No se pudo cargar el panel: ${error.message}`);
 });
-
